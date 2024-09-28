@@ -10,9 +10,13 @@ import EventItem from './EventItem.jsx';
 
 export default function NewEventsSection() {
   // Query:
+  const second = 1000;
+  const minute = 60000;
   const { isPending, isError, error, data } = useQuery({
     queryKey: ['events'],
     queryFn: fetchEvents,
+    staleTime: 15 * second,
+    gcTime: 2 * minute,
   });
 
   let content = null;
