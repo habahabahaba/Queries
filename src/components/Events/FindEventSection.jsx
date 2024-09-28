@@ -1,3 +1,7 @@
+// React-Query:
+import { useQuery } from '@tanstack/react-query';
+// Queries:
+// React:
 import { useRef } from 'react';
 
 export default function FindEventSection() {
@@ -8,13 +12,13 @@ export default function FindEventSection() {
   }
 
   return (
-    <section className="content-section" id="all-events-section">
+    <section className='content-section' id='all-events-section'>
       <header>
         <h2>Find your next event!</h2>
-        <form onSubmit={handleSubmit} id="search-form">
+        <form onSubmit={handleSubmit} id='search-form'>
           <input
-            type="search"
-            placeholder="Search events"
+            type='search'
+            placeholder='Search events'
             ref={searchElement}
           />
           <button>Search</button>
