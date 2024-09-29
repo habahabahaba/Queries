@@ -1,21 +1,22 @@
 // React-Query:
-import { useMutation, useQuery } from '@tanstack/react-query';
-import { queryClient } from '../../api/index.js';
+import { useQuery } from '@tanstack/react-query';
 // Queries:
 import { fetchEvent } from '../../api/queries/index.js';
-// Mutations:
-import { deleteEvent } from '../../api/mutations/index.js';
+
 // React-Router:
 import { Link, Outlet, useParams } from 'react-router-dom';
 
 // Components:
 import Header from '../Header.jsx';
+import EventDetailsHeader from './EventDetailsHeader.jsx';
 import ErrorBlock from '../UI/ErrorBlock.jsx';
 import LoadingIndicator from '../UI/LoadingIndicator.jsx';
 
 export default function EventDetails() {
+  // Routing:
   // Params (for id):
   const { id } = useParams();
+
   // Fetching event:
   const { data, isPending, isError, error } = useQuery({
     queryKey: ['event', id],
@@ -24,17 +25,12 @@ export default function EventDetails() {
 
   const formattedDate =
     new Date(data?.date + ' ' + data?.time).toUTCString() || '';
-  // console.log('formattedDate: ', formattedDate);
-
-  // Delete mutation
-
-  // Handlers:
 
   // JSX:
   const renderedDetails = isPending ? null : isError ? (
     <ErrorBlock
       title='An error occurred'
-      message={error.info?.message || 'Failed to fetch this event.'}
+      message={error.info?.message || 'Failed to load this event.'}
     />
   ) : (
     <div id='event-details-content'>
@@ -42,7 +38,9 @@ export default function EventDetails() {
       <div id='event-details-info'>
         <div>
           <p id='event-details-location'>{data.location}</p>
-          <time dateTime={`Todo-DateT$Todo-Time`}>{`${formattedDate}`}</time>
+          <p>
+            <time dateTime={`Todo-DateT$Todo-Time`}>{formattedDate}</time>
+          </p>
         </div>
         <p id='event-details-description'>{data.description}</p>
       </div>
@@ -58,18 +56,14 @@ export default function EventDetails() {
         </Link>
       </Header>
       <article id='event-details'>
-        <header>
-          <h1>{data ? data.title : 'Loading event details'}</h1>
-          {isPending ? (
+        {isPending ? (
+          <header>
+            <h1>Loading event details...</h1>
             <LoadingIndicator />
-          ) : (
-            <nav>
-              <button>Delete</button>
-              <Link to='edit'>Edit</Link>
-            </nav>
-          )}
-        </header>
-
+          </header>
+        ) : isError ? null : (
+          <EventDetailsHeader title={data.title} />
+        )}
         {renderedDetails}
       </article>
     </>
