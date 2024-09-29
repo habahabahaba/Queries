@@ -16,16 +16,39 @@ import LoadingIndicator from '../UI/LoadingIndicator.jsx';
 export default function EventDetails() {
   // Params (for id):
   const { id } = useParams();
-  // Fetch query:
+  // Fetching event:
   const { data, isPending, isError, error } = useQuery({
     queryKey: ['event', id],
     queryFn: ({ signal }) => fetchEvent({ signal, id }),
   });
+
+  const formattedDate =
+    new Date(data?.date + ' ' + data?.time).toUTCString() || '';
+  // console.log('formattedDate: ', formattedDate);
+
   // Delete mutation
 
   // Handlers:
 
   // JSX:
+  const renderedDetails = isPending ? null : isError ? (
+    <ErrorBlock
+      title='An error occurred'
+      message={error.info?.message || 'Failed to fetch this event.'}
+    />
+  ) : (
+    <div id='event-details-content'>
+      <img src={`http://localhost:3000/${data.image}`} alt='A stock image' />
+      <div id='event-details-info'>
+        <div>
+          <p id='event-details-location'>{data.location}</p>
+          <time dateTime={`Todo-DateT$Todo-Time`}>{`${formattedDate}`}</time>
+        </div>
+        <p id='event-details-description'>{data.description}</p>
+      </div>
+    </div>
+  );
+
   return (
     <>
       <Outlet />
@@ -34,38 +57,20 @@ export default function EventDetails() {
           View all Events
         </Link>
       </Header>
-      {isPending ? <LoadingIndicator /> : null}
-      {isError ? (
-        <ErrorBlock
-          title='An error occurred'
-          message={error.info?.message || 'Failed to fetch this event.'}
-        />
-      ) : null}
       <article id='event-details'>
         <header>
-          <h1>EVENT TITLE</h1>
-          <nav>
-            <button>Delete</button>
-            <Link to='edit'>Edit</Link>
-          </nav>
+          <h1>{data ? data.title : 'Loading event details'}</h1>
+          {isPending ? (
+            <LoadingIndicator />
+          ) : (
+            <nav>
+              <button>Delete</button>
+              <Link to='edit'>Edit</Link>
+            </nav>
+          )}
         </header>
-        {data ? (
-          <div id='event-details-content'>
-            <img
-              src={`http://localhost:3000/${data.image}`}
-              alt='A stock image'
-            />
-            <div id='event-details-info'>
-              <div>
-                <p id='event-details-location'>{data.location}</p>
-                <time
-                  dateTime={`Todo-DateT$Todo-Time`}
-                >{`${data.date} @ ${data.time}`}</time>
-              </div>
-              <p id='event-details-description'>{data.description}</p>
-            </div>
-          </div>
-        ) : null}
+
+        {renderedDetails}
       </article>
     </>
   );
