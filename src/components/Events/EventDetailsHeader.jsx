@@ -21,7 +21,10 @@ export default function EventDetailsHeader({ title }) {
     mutationFn: deleteEvent,
     onSuccess: () => {
       // Revalidating fetchEvents query:
-      queryClient.invalidateQueries({ queryKey: ['events'] });
+      queryClient.invalidateQueries({
+        queryKey: ['events'],
+        refetchType: 'none',
+      });
 
       // Navigating away:
       navigate('/events');
