@@ -1,7 +1,7 @@
 // React-Query:
 import { useQuery } from '@tanstack/react-query';
 // Queries:
-import { fetchSelectableImages } from '../../queries/index.js';
+import { fetchSelectableImages } from '../../api/queries/index.js';
 // React:
 import { useState } from 'react';
 // Components:

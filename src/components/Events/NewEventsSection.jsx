@@ -1,7 +1,7 @@
 // React-Query:
 import { useQuery } from '@tanstack/react-query';
 // Queries:
-import { fetchEvents } from '../../queries/index.js';
+import { fetchEvents } from '../../api/queries/index.js';
 // React:
 // Components:
 import LoadingIndicator from '../UI/LoadingIndicator.jsx';

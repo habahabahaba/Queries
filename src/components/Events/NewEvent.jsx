@@ -1,7 +1,8 @@
 // React-Query:
 import { useMutation } from '@tanstack/react-query';
+import { queryClient } from '../../api/index.js';
 // Mutations:
-import { postNewEvent } from '../../mutations/index.js';
+import { postNewEvent } from '../../api/mutations/index.js';
 // React-Router:
 import { Link, useNavigate } from 'react-router-dom';
 // Components:
@@ -15,7 +16,15 @@ export default function NewEvent() {
   // Mutation:
   const { mutate, isPending, isError, error } = useMutation({
     mutationFn: postNewEvent,
+    onSuccess: () => {
+      // Revalidating fetchEvents query:
+      queryClient.invalidateQueries({ queryKey: ['events'] });
+
+      // Navigating away:
+      navigate('/events');
+    },
   });
+
   // Handlers:
   function handleSubmit(formData) {
     mutate({ event: formData });

@@ -1,7 +1,7 @@
 // React-Query:
 import { useQuery } from '@tanstack/react-query';
 // Queries:
-import { fetchEvents } from '../../queries';
+import { fetchEvents } from '../../api/queries';
 // React:
 import { useRef, useState } from 'react';
 // Components:
