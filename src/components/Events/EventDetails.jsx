@@ -2,10 +2,8 @@
 import { useQuery } from '@tanstack/react-query';
 // Queries:
 import { fetchEvent } from '../../api/queries/index.js';
-
 // React-Router:
 import { Link, Outlet, useParams } from 'react-router-dom';
-
 // Components:
 import Header from '../Header.jsx';
 import EventDetailsHeader from './EventDetailsHeader.jsx';
