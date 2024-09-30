@@ -45,7 +45,7 @@ export async function putEvent({ id, eventData }) {
   const response = await fetch(`${BASE_URL}/${id}`, {
     method: 'PUT',
     headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify(eventData),
+    body: JSON.stringify({ event: eventData }),
   });
 
   if (!response.ok) {

@@ -1,5 +1,6 @@
 // React-Query:
 import { useQuery, useMutation } from '@tanstack/react-query';
+import { queryClient } from '../../api/index.js';
 // Queries:
 import { fetchEvent } from '../../api/queries/index.js';
 // Mutations:
@@ -24,18 +25,41 @@ export default function EditEvent() {
   });
 
   // Update event:
-  const {
-    mutate,
-    updateIsPending = isPending,
-    isUpdateError = isError,
-    updateError = error,
-  } = useMutation({
-    mutationFn: () => putEvent,
+  const { mutate } = useMutation({
+    mutationFn: putEvent,
+    onMutate: async (data) => {
+      const updatedEventData = data.eventData;
+      // console.log('updatedEventData from onMutate: ', updatedEventData);
+
+      // Preventing clashing queries:
+      await queryClient.cancelQueries({ queryKey: ['events', id] });
+
+      // Backing-up the original event data:
+      const originalEventData = queryClient.getQueryData(['events', id]);
+
+      // Updating the event optimistically:
+      queryClient.setQueryData(['events', id], updatedEventData);
+
+      return { originalEventData };
+    },
+
+    // Restoring original event data, in case of an error:
+    onError: (error, data, context) => {
+      queryClient.setQueryData(['events', id], context.originalEventData);
+      console.log('UPDATE ERROR');
+    },
+
+    onSettled: () => {
+      queryClient.invalidateQueries({ queryKey: ['events'] });
+    },
   });
 
   // Handlers:
   function handleSubmit(formData) {
+    // Updating the event:
     mutate({ id, eventData: formData });
+    // Navigating away:
+    navigate('../');
   }
 
   function handleClose() {
