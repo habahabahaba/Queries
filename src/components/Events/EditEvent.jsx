@@ -10,7 +10,6 @@ import { Link, useNavigate, useParams } from 'react-router-dom';
 // Components:
 import Modal from '../UI/Modal.jsx';
 import EventForm from './EventForm.jsx';
-import LoadingIndicator from '../UI/LoadingIndicator.jsx';
 import ErrorBlock from '../UI/ErrorBlock.jsx';
 
 export default function EditEvent() {
@@ -19,7 +18,7 @@ export default function EditEvent() {
   const { id } = useParams();
 
   // Fetch event:
-  const { data, isPending, isError, error } = useQuery({
+  const { data, isError, error } = useQuery({
     queryKey: ['events', id],
     queryFn: ({ signal }) => fetchEvent({ signal, id }),
   });
@@ -68,13 +67,6 @@ export default function EditEvent() {
 
   // JSX:
   let content;
-  if (isPending) {
-    content = (
-      <div className='center'>
-        <LoadingIndicator />
-      </div>
-    );
-  }
   if (isError) {
     content = (
       <>
