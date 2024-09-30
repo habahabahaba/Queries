@@ -39,3 +39,23 @@ export async function deleteEvent({ id }) {
 
   return data;
 }
+
+// Update event:
+export async function putEvent({ id, eventData }) {
+  const response = await fetch(`${BASE_URL}/${id}`, {
+    method: 'PUT',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(eventData),
+  });
+
+  if (!response.ok) {
+    const error = new Error('An error occurred, while updating the event.');
+    error.code = response.status;
+    error.info = await response.json();
+    throw error;
+  }
+
+  const data = await response.json();
+
+  return data;
+}
