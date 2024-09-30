@@ -9,6 +9,8 @@ import {
 } from 'react-router-dom';
 // Loaders:
 import { editEventLoader } from './components/Events/EditEventLoader.js';
+// Actions:
+// import { editEventAction } from './components/Events/editEventAction.js';
 // Components:
 import Events from './components/Events/Events.jsx';
 import EventDetails from './components/Events/EventDetails.jsx';
@@ -39,6 +41,7 @@ const router = createBrowserRouter([
         path: '/events/:id/edit',
         element: <EditEvent />,
         loader: editEventLoader,
+        // action: editEventAction, // Use React-Query mutation instead.
       },
     ],
   },
