@@ -13,8 +13,8 @@ export default function NewEventsSection() {
   const second = 1000;
   const minute = 60000;
   const { isPending, isError, error, data } = useQuery({
-    queryKey: ['events'],
-    queryFn: fetchEvents,
+    queryKey: ['events', { max: 3 }],
+    queryFn: ({ signal, queryKey }) => fetchEvents({ signal, ...queryKey[1] }),
     staleTime: 15 * second,
     gcTime: 2 * minute,
   });
@@ -37,7 +37,7 @@ export default function NewEventsSection() {
   if (data) {
     content = (
       <ul className='events-list'>
-        {data.map((event) => (
+        {data.reverse().map((event) => (
           <li key={event.id}>
             <EventItem event={event} />
           </li>

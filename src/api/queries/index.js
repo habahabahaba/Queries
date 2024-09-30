@@ -1,8 +1,17 @@
 const BASE_URL = 'http://localhost:3000/events';
 
 // Many events:
-export async function fetchEvents({ signal, searchTerm }) {
-  const url = BASE_URL + (searchTerm ? `?search=${searchTerm}` : '');
+export async function fetchEvents({ signal, searchTerm, max }) {
+  const url =
+    BASE_URL +
+    (searchTerm && max
+      ? `?search=${searchTerm}&max=${max}`
+      : searchTerm
+      ? `?search=${searchTerm}`
+      : max
+      ? `?max=${max}`
+      : '');
+
   // console.log('fetchEvents url: ', url);
 
   const response = await fetch(url, { signal });
