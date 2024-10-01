@@ -18,9 +18,11 @@ export default function EditEvent() {
   const { id } = useParams();
 
   // Fetch event:
+  const second = 1000;
   const { data, isError, error } = useQuery({
     queryKey: ['events', id],
     queryFn: ({ signal }) => fetchEvent({ signal, id }),
+    staleTime: 10 * second, // to avoid refetching after the editEventLoader.
   });
 
   // Update event:
